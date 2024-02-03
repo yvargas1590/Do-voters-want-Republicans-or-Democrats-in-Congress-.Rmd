@@ -1,0 +1,62 @@
+---
+title: "Do Voters Want Republicans or Democrats in Congress?"
+author: "Yourlagne Vargas"
+date: "2024-02-02"
+output: html_document
+---
+
+
+#### **Overview**
+
+This analysis aims to explore the
+[Generic Ballot Poll Data]("https://projects.fivethirtyeight.com/polls/generic-ballot/")
+from the FiveThirtyEight website link to the article. The dataset contains information about public opinion on which party's candidate voters would choose in a generic election for the House of Representatives.
+
+
+```{r}
+# Load required packages
+library(readr)
+library(dplyr)
+
+# Read the data from the URL
+data_url <- "https://raw.githubusercontent.com/yvargas1590/congress-generic-ballot/main/generic_ballot_averages.csv"
+data <- read_csv(data_url)
+
+# Fix column name by removing the tab character
+colnames(data)[2] <- "pct_estimate"
+
+# Fix column name by removing the tab character
+colnames(data)[2] <- "pct_estimate"
+
+# Subset the columns in the dataset
+columns <- c("candidate", "pct_estimate", "cycle")
+subset_data <- data %>% select(all_of(columns))
+
+# Rename columns with meaningful names
+colnames(subset_data) <- c("candidate", "pct_estimate", "cycle")
+
+# Preview the resulting subset of the dataset
+subset_data
+```
+
+
+```{r}
+subset_data <- subset_data %>% filter(candidate %in% c("Democrats", "Republicans"))
+```
+
+```{r}
+library(ggplot2)
+
+# Plot the data
+ggplot(subset_data, aes(x = cycle, y = pct_estimate, color = candidate, linetype = candidate)) +
+  geom_line() +
+  labs(x = "Cycle", y = "Percentage Estimate", title = "Public Opinion on Republicans vs Democrats") +
+  theme_minimal()
+```
+
+
+---
+#### **Conclusions**
+In this analysis, we have successfully subsetted the Generic Ballot Poll Data from the FiveThirtyEight website and transformed the column names to be more meaningful. The resulting dataset contains the columns "candidate", "pct_estimate", and "cycle".
+
+To extend this analysis, one could perform further exploratory data analysis on the dataset to uncover insights and trends in public opinion on the House of Representatives election. Additionally, one could compare this dataset with historical election results to validate the accuracy of the generic ballot polls.
